@@ -1,0 +1,145 @@
+<nav class="navbar navbar-expand navbar-dark bg-primary mg-4"> 
+  <div class="container" >
+    <a class="navbar-brand">STOCK MARKET CHARTING</a>
+    <div>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item"><button (click) ="ipo()" class="btn btn-primary" >IPOs</button></li>
+        <li class="nav-item"><button (click) ="compareCompany()" class="btn btn-primary" >Compare Company</button></li>
+        <li class="nav-item"><button (click) ="search()" class="btn btn-primary" >Search Company</button></li>
+        <li class="nav-item"><button (click) ="other()" class="btn btn-primary" >Profile</button></li>
+        <li class="nav-item"><button (click) ="logout()" class="btn btn-primary" >Log Out</button></li>
+      </ul>
+    </div>
+  </div>
+  </nav>
+  <ul *ngIf = "others">
+    <div class="card">
+    <div class="card-body">
+    <h2>Name:  {{profile.name}}</h2>
+    <h2>Email:  {{profile.email}}</h2>
+    <h2>Mobile Number: {{profile.mobile_no}}</h2>
+    <button (click)="editprofile()" class="btn btn-light"><i class="fa fa-pencil"></i></button>
+  </div>
+</div>
+</ul>
+<ul *ngIf = "Profile">
+    <form (submit)="edit()" >
+      <h2>Update Profile</h2>
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="name">Name:</label>
+        <div class="col-sm-10">
+          <input type="text"  [(ngModel)]="profile.name" class="form-control"name="name">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="email"> Email:</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" [(ngModel)]="profile.email" name="email">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="password"> Password:</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" [(ngModel)]="profile.password" name="password">
+        </div>
+      </div>
+    
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="mobile_no"> Mobile Number:</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" [(ngModel)]="profile.mobile_no" name="mobile_no">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-default mb-4">Update</button>
+        </div>
+      </div>
+    </form>
+  </ul>
+    
+  
+  <ul *ngIf = "company"> 
+     
+    <div class="card-block pt-4">
+      Select Company/Sector
+    <select [(ngModel)]="com">
+      <option *ngFor="let c of company_option">{{c}}</option>
+    </select>
+  </div>
+  <div class="card-block pt-4">
+    Select Stock Exchange
+    <select [(ngModel)]="exchange">
+      <option *ngFor="let e of exchange_option">{{e}}</option>
+    </select>
+  </div>
+  <div class="card-block pt-4">
+    Company Name
+    <input type="text" class="form-control" [(ngModel)]="company_name" name="company_name">
+  </div>
+  <div class="card-block pt-4">
+    <form id="from1">
+      <div class="input-group">
+        From Date
+        <input type="date" class="form-control" id="FromDate" name="FromDate"
+        [(ngModel)]="FromDate">
+      </div>
+    </form>  
+  </div>
+  <div class="card-block pt-4">
+    <form id="from1">
+      <div class="input-group">
+        Last Date
+        <input type="date" class="form-control" id="LastDate" name="LastDate"
+        [(ngModel)]="LastDate">
+      </div>
+    </form>  
+  </div>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button (click)="addData()" type="button" class="btn btn-default mb-4">Add</button>
+      <button (click)="generate()" type="button" class="btn btn-default mb-4">Generate Map</button>
+      <div *ngIf="chart">
+        <canvas id="canvas">{{ chart }}</canvas>
+      </div>
+    </div>
+  </div>
+  </ul>
+  <ul *ngIf = "sector">
+    <div>
+      Company Name
+    <input type="text" class="form-control" [(ngModel)]="compname" name="compname">
+    <button (click)="getCompany()" type="button" class="btn btn-default mb-4">Search</button>
+  </div>
+
+  </ul>
+  <ul *ngIf = "ipos"> 
+    <div>IPO Details</div>
+    <div class="col-sm-10">
+    <div class="card" *ngFor="let comp of ipo_details">
+      <div class="card-body">
+        <h4>{{comp.comp_name}}</h4>
+        <button (click)="ipodetail(comp)" class="btn btn-light">
+        Details</button>
+      </div>
+    </div>
+  </div>
+  </ul>
+
+  <ul *ngIf = "detail"> 
+    <div class="card-block pt-4">ID:  {{ipodata.id}}</div>
+    <div class="card-block pt-4">COMPANY NAME:  {{ipodata.comp_name}}</div>
+    <div class="card-block pt-4">OPEN DATE:  {{ipodata.opendate}}</div>
+    <div class="card-block pt-4">PRICE:  {{ipodata.price}}</div>
+    <div class="card-block pt-4">STOCK EXCHANGE:  {{ipodata.stock_exchange}}</div>
+    <div class="card-block pt-4">NO OF SHARES:  {{ipodata.no_of_shares}}</div>
+    <div class="card-block pt-4">REMARKS:  {{ipodata.remarks}}</div>
+  </ul>
+
+  <ul *ngIf="detail1">
+  <div>COMPANY NAME:  {{  companyData.compname}}</div>
+  <div>TURN OVER: {{  companyData.turnover}}</div>
+  <div>CEO: {{companyData.ceo}}</div>
+  <div>BOARD OF DIRECTORS:  {{companyData.board_of_dir}}</div>
+  <div>STOCK EXCHANGE:  {{companyData.stockexchange}}</div>
+  </ul>

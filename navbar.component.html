@@ -1,0 +1,156 @@
+<nav class="navbar navbar-expand navbar-dark bg-primary mg-4"> 
+<div class="container" >
+  <a class="navbar-brand">STOCK MARKET CHARTING</a>
+  <div>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item"><button (click) ="importData()" class="btn btn-primary" >Import Data</button></li>
+      <li class="nav-item"><button (click) ="manageCompany()" class="btn btn-primary" >Manage Company</button></li>
+      <!-- <li class="nav-item"><button (click) ="manageExchange()" class="btn btn-primary" >Manage Exchange</button></li> -->
+      <li class="nav-item"><button (click) ="updateIpoDetails()" class="btn btn-primary" >Update Ipo Details</button></li>
+      <!-- <li class="nav-item"><button (click) ="createcompany()" class="btn btn-primary" >Create New Company</button></li> -->
+      <li class="nav-item"><button (click) ="logout()" class="btn btn-primary" >Log Out</button></li>
+    </ul>
+  </div>
+</div>
+</nav>
+<ul *ngIf = "data">
+  <h4>Import Excel</h4>
+  <div class = "file-upload-wrapper">
+    <input type="file" id="customFile" action=".xlsx, .xls, .csv" (change)="selectFile($event)">
+<button class="btn btn-primary" [disabled]="!selectedFiles" (click)="upload()">Save File</button>
+<ul  *ngIf="error">Please choose Excel file</ul>
+<ul class="card-body" *ngIf="sucess">File added succesfully</ul>
+  </div>
+</ul>
+<ul *ngIf = "company">
+  <h3>Company</h3>
+  <button (click)="createcompany()" class="btn-light">ADD NEW COMPANY</button>
+  <div class="card" *ngFor="let comp of com">
+    <div class="card-body">
+      <h4>{{comp.compname}}</h4>
+      <hr>
+      <button (click)="deletecompany(comp)" class="btn btn-danger"><i class="fa fa-remove"></i>
+      </button>
+      <button (click)="editcompany(comp)" class="btn btn-light"><i class="fa fa-pencil"></i>
+      </button>
+    </div>
+  </div>
+  
+</ul>
+<ul *ngIf = "exchange">
+  <h2>EXC</h2>
+</ul>
+<ul *ngIf = "ipo">
+  <form (submit)="addNewIpo()" >
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="comp_name">Company Name:</label>
+      <div class="col-sm-10">
+        <input type="text"  [(ngModel)]="ipodata.comp_name" class="form-control"name="comp_name" placeholder="Enter Company Name">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="price"> Price:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" [(ngModel)]="ipodata.price" name="price" placeholder="Enter Price">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="no_of_shares"> Number of Shares:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" [(ngModel)]="ipodata.no_of_shares" name="no_of_shares" placeholder="Enter Number of Shares">
+      </div>
+    </div>
+  
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="stock_exchange"> Stock Exchanges:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" [(ngModel)]="ipodata.stock_exchange" name="stock_exchange" placeholder="Enter Stock Exchange">
+      </div>
+    </div>
+  
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="opendate"> Open Date:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" [(ngModel)]="ipodata.opendate" name="opendate" placeholder="Enter Open Date">
+      </div>
+    </div>
+  
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="remarks"> Remarks:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" [(ngModel)]="ipodata.remarks" name="remarks" placeholder="Remarks">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-default mb-4">Submit</button>
+      </div>
+    </div>
+  </form>
+</ul>
+<ul *ngIf = "new">
+  <h2 *ngIf= "!edit">Create New Company</h2>
+  <h2 *ngIf= "edit">Update Company</h2>
+  <form (submit)="addNewCompany()" >
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="compname">Company Name:</label>
+    <div class="col-sm-10">
+      <input type="text"  [(ngModel)]="com1.compname" class="form-control"name="compname" placeholder="Enter Company Name">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="turnover">Turnover:</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" [(ngModel)]="com1.turnover" name="turnover" placeholder="Enter Turnover">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="ceo"> CEO:</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" [(ngModel)]="com1.ceo" name="ceo" placeholder="Enter CEO">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="board_of_dir"> Board of Directors:</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" [(ngModel)]="com1.board_of_dir" name="board_of_dir" placeholder="Enter Board of Directory">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="stockexchange"> Stock Exchanges:</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" [(ngModel)]="com1.stockexchange" name="stockexchange" placeholder="Enter Stock Exchange">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="sector"> Sector:</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" [(ngModel)]="com1.sector" name="sector" placeholder="Enter Sector">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="writeup"> Writeup:</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" [(ngModel)]="com1.writeup" name="writeup" placeholder="Write">
+    </div>
+  </div>
+  
+
+  <div class="form-group">
+    <label class="control-label col-sm-2" for="stockcode"> Stock Code:</label>
+    <div class="col-sm-10">
+      <input type="text" class="form-control" [(ngModel)]="com1.stockcode" name="stockcode" placeholder="Enter Stock Code">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-default mb-4">Submit</button>
+    </div>
+  </div>
+  
+</form>
+</ul>
